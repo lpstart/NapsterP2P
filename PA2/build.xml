@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="jar">
+
+	<property name="build.dir" location="build" />
+	<property name="build.classes" location="${build.dir}/classes" />
+	<property name="build.src" location="${build.dir}/src" />
+	<property name="build.lib.dir" location="${build.dir}/dist" />
+
+
+	<property name="execute.peerClient.class" value="napster.server.PeerClient" />
+
+	<property name="execute.peerClient.jarName" value="PeerClient.jar" />
+
+	<fileset id="src.path" dir="src" includes="**/*.java" />
+	<fileset id="configureFile.path" dir="servers" includes="**" />
+
+	<target name="init">
+		<delete dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.src}" />
+		<mkdir dir="${build.classes}" />
+		<mkdir dir="${build.lib.dir}" />
+	</target>
+
+	<target name="copySrc" depends="init">
+		<copy todir="${build.src}">
+			<fileset refid="src.path">
+			</fileset>
+		</copy>
+		<copy todir="${build.lib.dir}/servers">
+			<fileset refid="configureFile.path">
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="compile" depends="copySrc">
+		<javac includeantruntime="true" destdir="build/classes" srcdir="src">
+		</javac>
+	</target>
+	<target name="jar" depends="compile">
+		<jar destfile="${build.lib.dir}/${execute.peerClient.jarName}" basedir="${build.classes}">
+			<manifest>
+				<attribute name="Main-Class" value="${execute.peerClient.class}" />
+			</manifest>
+		</jar>
+	</target>
+</project>
